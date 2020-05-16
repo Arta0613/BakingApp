@@ -12,7 +12,7 @@ public class HomeApplication extends Application {
     private final AppContainer appContainer = new AppContainer();
 
     @NonNull
-    public AppContainer getAppContainer() {
+    public final AppContainer getAppContainer() {
         return appContainer;
     }
 }
