@@ -1,4 +1,4 @@
-package com.example.bakingapp.ui;
+package com.example.bakingapp.ui.adapters;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -11,17 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bakingapp.BR;
 import com.example.bakingapp.R;
 import com.example.bakingapp.domain.BakingRecipeItem;
+import com.example.bakingapp.ui.HomeItemClickListener;
 
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private List<BakingRecipeItem> recipes;
+    private HomeItemClickListener homeItemClickListener;
 
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        ViewDataBinding binding = DataBindingUtil.inflate(
+        final ViewDataBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()), R.layout.item_recipe, parent, false
         );
 
@@ -42,6 +44,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         this.recipes = recipes;
     }
 
+    public void setHomeItemClickListener(@NonNull final HomeItemClickListener homeItemClickListener) {
+        this.homeItemClickListener = homeItemClickListener;
+    }
+
     class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         @NonNull
@@ -53,6 +59,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
 
         void bind(final int position) {
+            binding.getRoot().setOnClickListener(l -> homeItemClickListener.onItemClick(recipes.get(position)));
             binding.setVariable(BR.recipeItem, recipes.get(position));
             binding.executePendingBindings();
         }

@@ -33,6 +33,11 @@ public class BakingRecipeIngredients {
     }
 
     @NonNull
+    public final String getRecipeAmount() {
+        return getRecipeQuantity() + " " + getRecipeMeasure();
+    }
+
+    @NonNull
     @Override
     public final String toString() {
         return "BakingRecipeIngredients{" +

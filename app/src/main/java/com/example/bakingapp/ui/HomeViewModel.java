@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.bakingapp.domain.BakingRecipeItem;
 import com.example.bakingapp.repository.BakingRepository;
+import com.example.bakingapp.ui.adapters.RecipeAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,7 +22,6 @@ public class HomeViewModel extends ViewModel {
     private static final String TAG = HomeViewModel.class.getSimpleName();
 
     private BakingRepository repository;
-    @NonNull private List<BakingRecipeItem> recipeItems = new ArrayList<>();
     @NonNull private final RecipeAdapter adapter = new RecipeAdapter();
     @NonNull private final CompositeDisposable disposables = new CompositeDisposable();
 
@@ -45,13 +44,14 @@ public class HomeViewModel extends ViewModel {
         loadRecipes();
     }
 
+    public void setClickListenerToAdapter(@NonNull final HomeItemClickListener homeItemClickListener) {
+        adapter.setHomeItemClickListener(homeItemClickListener);
+    }
+
     public void loadRecipes() {
-        if (!repository.isRecipeLoading() && recipeItems.isEmpty()) {
-            repository.setRecipeLoading(true);
-            loadingIndicator.setValue(true);
-            showErrorText.setValue(false);
-            load();
-        }
+        loadingIndicator.setValue(true);
+        showErrorText.setValue(false);
+        load();
     }
 
     private void load() {
@@ -62,12 +62,11 @@ public class HomeViewModel extends ViewModel {
                     @Override
                     public void onSuccess(List<BakingRecipeItem> bakingRecipeItems) {
                         Log.d(TAG, "onSuccess: " + bakingRecipeItems);
-                        recipeItems = bakingRecipeItems;
+                        repository.setRecipeItems(bakingRecipeItems);
                         setAdapter();
 
                         loadingIndicator.setValue(false);
                         showErrorText.setValue(false);
-                        repository.setRecipeLoading(false);
                     }
 
                     @Override
@@ -75,13 +74,12 @@ public class HomeViewModel extends ViewModel {
                         Log.e(TAG, "Error retrieving recipes: ", e);
                         loadingIndicator.setValue(false);
                         showErrorText.setValue(true);
-                        repository.setRecipeLoading(false);
                     }
                 }));
     }
 
     private void setAdapter() {
-        adapter.setRecipes(recipeItems);
+        adapter.setRecipes(repository.getLoadedRecipes());
         adapter.notifyDataSetChanged();
     }
 }

@@ -2,4 +2,6 @@
     <string name="app_name">Baking App</string>
     <string name="recipe_image">Recipe Image</string>
     <string name="unable_to_load_recipes">Unable to load Recipes \n\t\t\t\tTap To Try Again</string>
+    <string name="ingredients_label">Ingredients</string>
+    <string name="steps_label">Steps</string>
 </resources>
