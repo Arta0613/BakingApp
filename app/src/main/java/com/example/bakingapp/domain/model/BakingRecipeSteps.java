@@ -5,10 +5,14 @@ import androidx.annotation.NonNull;
 public class BakingRecipeSteps {
 
     private final int id;
-    @NonNull private final String shortDescription;
-    @NonNull private final String description;
-    @NonNull private final String videoUrl;
-    @NonNull private final String thumbnailUrl;
+    @NonNull
+    private final String shortDescription;
+    @NonNull
+    private final String description;
+    @NonNull
+    private final String videoUrl;
+    @NonNull
+    private final String thumbnailUrl;
 
     public BakingRecipeSteps(
             final int id,
@@ -46,6 +50,11 @@ public class BakingRecipeSteps {
     @NonNull
     public final String getThumbnailUrl() {
         return thumbnailUrl;
+    }
+
+    @NonNull
+    public final String getShortDescriptionWithStep() {
+        return (getId() + 1) + ".\t" + shortDescription;
     }
 
     @NonNull

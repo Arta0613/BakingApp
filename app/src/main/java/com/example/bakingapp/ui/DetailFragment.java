@@ -1,6 +1,5 @@
 package com.example.bakingapp.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,22 +13,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bakingapp.HomeApplication;
 import com.example.bakingapp.R;
-import com.example.bakingapp.databinding.FragmentHomeBinding;
-import com.example.bakingapp.domain.BakingRecipeItem;
+import com.example.bakingapp.databinding.FragmentDetailBinding;
 import com.example.bakingapp.repository.BakingRepository;
 
 import java.util.Objects;
 
-public class HomeFragment extends Fragment implements HomeItemClickListener {
-
-    private static final String TAG = HomeFragment.class.getSimpleName();
-
-    private HomeViewModel homeViewModel;
-
-    @Override
-    public void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+public class DetailFragment extends Fragment {
 
     @Nullable
     @Override
@@ -38,15 +27,14 @@ public class HomeFragment extends Fragment implements HomeItemClickListener {
             @Nullable final ViewGroup container,
             @Nullable final Bundle savedInstanceState
     ) {
-        final FragmentHomeBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+        final FragmentDetailBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false);
 
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        DetailViewModel detailViewModel = new ViewModelProvider(requireActivity()).get(DetailViewModel.class);
 
         binding.setLifecycleOwner(getViewLifecycleOwner());
-        binding.setViewModel(homeViewModel);
+        binding.setViewModel(detailViewModel);
 
-        homeViewModel.setRepository(getBakingRepository());
-        homeViewModel.setClickListenerToAdapter(this);
+        detailViewModel.init(Objects.requireNonNull(getBakingRepository().getSelectedRecipe()));
 
         return binding.getRoot();
     }
@@ -57,13 +45,5 @@ public class HomeFragment extends Fragment implements HomeItemClickListener {
                 ((HomeApplication) Objects.requireNonNull(getActivity()).getApplication());
 
         return homeApplication.getAppContainer().getBakingRepository();
-    }
-
-    @Override
-    public void onItemClick(@NonNull final BakingRecipeItem bakingRecipeItem) {
-        getBakingRepository().setSelectedRecipe(bakingRecipeItem);
-
-        Intent intent = new Intent(requireActivity(), DetailActivity.class);
-        startActivity(intent);
     }
 }

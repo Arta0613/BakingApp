@@ -1,19 +1,21 @@
 package com.example.bakingapp.repository;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.bakingapp.domain.BakingRecipeItem;
 import com.example.bakingapp.repository.network.BakingRemoteDataSource;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.Single;
 
 public class BakingRepository {
 
     @NonNull private final BakingRemoteDataSource bakingRemoteDataSource;
-    @NonNull private final AtomicBoolean recipeLoading = new AtomicBoolean(false);
+    @NonNull private List<BakingRecipeItem> recipeItems = new ArrayList<>();
+    @Nullable private BakingRecipeItem selectedRecipe;
 
     public BakingRepository(@NonNull final BakingRemoteDataSource bakingRemoteDataSource) {
         this.bakingRemoteDataSource = bakingRemoteDataSource;
@@ -21,14 +23,28 @@ public class BakingRepository {
 
     @NonNull
     public final Single<List<BakingRecipeItem>> getRecipes() {
-        return bakingRemoteDataSource.getRecipes();
+        if (recipeItems.isEmpty()) {
+            return bakingRemoteDataSource.getRecipes();
+        } else {
+            return Single.just(recipeItems);
+        }
     }
 
-    public final boolean isRecipeLoading() {
-        return recipeLoading.get();
+    @NonNull
+    public final List<BakingRecipeItem> getLoadedRecipes() {
+        return recipeItems;
     }
 
-    public void setRecipeLoading(final boolean recipeLoading) {
-        this.recipeLoading.set(recipeLoading);
+    public void setRecipeItems(@NonNull final List<BakingRecipeItem> recipeItems) {
+        this.recipeItems = recipeItems;
+    }
+
+    @Nullable
+    public final BakingRecipeItem getSelectedRecipe() {
+        return selectedRecipe;
+    }
+
+    public void setSelectedRecipe(@NonNull final BakingRecipeItem selectedRecipe) {
+        this.selectedRecipe = selectedRecipe;
     }
 }
