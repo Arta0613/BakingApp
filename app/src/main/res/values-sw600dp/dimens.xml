@@ -6,4 +6,6 @@
     <dimen name="HomeMarginEnd">8dp</dimen>
 
     <dimen name="IngredientsListHeight">300dp</dimen>
+
+    <dimen name="player_height">300dp</dimen>
 </resources>
