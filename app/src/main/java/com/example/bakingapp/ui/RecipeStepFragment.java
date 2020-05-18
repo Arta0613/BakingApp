@@ -16,6 +16,17 @@ import com.example.bakingapp.databinding.FragmentRecipeStepBinding;
 
 public class RecipeStepFragment extends Fragment {
 
+    @Nullable private final RecipeStepViewModel tabletModeViewModel;
+
+    // required empty constructor if paramaterized constructor is used
+    public RecipeStepFragment() {
+        tabletModeViewModel = null;
+    }
+
+    public RecipeStepFragment(@Nullable final RecipeStepViewModel tabletModeViewModel) {
+        this.tabletModeViewModel = tabletModeViewModel;
+    }
+
     @Nullable
     @Override
     public View onCreateView(
@@ -26,10 +37,15 @@ public class RecipeStepFragment extends Fragment {
         final FragmentRecipeStepBinding binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_step, container, false);
 
-        final RecipeStepViewModel recipeStepViewModel = new ViewModelProvider(requireActivity()).get(RecipeStepViewModel.class);
+        final RecipeStepViewModel viewModel;
+        if (tabletModeViewModel != null) {
+            viewModel = tabletModeViewModel;
+        } else {
+            viewModel = new ViewModelProvider(requireActivity()).get(RecipeStepViewModel.class);
+        }
 
         binding.setLifecycleOwner(getViewLifecycleOwner());
-        binding.setViewModel(recipeStepViewModel);
+        binding.setViewModel(viewModel);
 
         return binding.getRoot();
     }

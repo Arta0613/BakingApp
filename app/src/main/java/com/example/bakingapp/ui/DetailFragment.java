@@ -1,6 +1,5 @@
 package com.example.bakingapp.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +11,18 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bakingapp.HomeApplication;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentDetailBinding;
-import com.example.bakingapp.domain.model.BakingRecipeIngredients;
 import com.example.bakingapp.repository.BakingRepository;
+import com.example.bakingapp.util.Utils;
 
 import java.util.Objects;
 
-public class DetailFragment extends Fragment implements RecipeStepItemClickListener {
+public class DetailFragment extends Fragment {
 
     private final static String TAG = DetailFragment.class.getSimpleName();
+
+    private final Utils utils = new Utils();
 
     @Nullable
     @Override
@@ -38,23 +38,16 @@ public class DetailFragment extends Fragment implements RecipeStepItemClickListe
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewModel(detailViewModel);
 
-        detailViewModel.init(Objects.requireNonNull(getBakingRepository().getSelectedRecipe()), this);
+        detailViewModel.init(
+                Objects.requireNonNull(getBakingRepository().getSelectedRecipe()),
+                (RecipeStepItemClickListener) Objects.requireNonNull(getActivity())
+        );
 
         return binding.getRoot();
     }
 
     @NonNull
     private BakingRepository getBakingRepository() {
-        final HomeApplication homeApplication =
-                ((HomeApplication) Objects.requireNonNull(getActivity()).getApplication());
-
-        return homeApplication.getAppContainer().getBakingRepository();
-    }
-
-    @Override
-    public void stepClicked(final int position) {
-        Intent intent = new Intent(requireActivity(), RecipeStepActivity.class);
-        intent.putExtra(BakingRecipeIngredients.STEP_POSITION, position);
-        startActivity(intent);
+        return utils.getBakingRepository(Objects.requireNonNull(getActivity()).getApplication());
     }
 }

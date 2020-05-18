@@ -1,43 +1,61 @@
 package com.example.bakingapp.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bakingapp.HomeApplication;
 import com.example.bakingapp.R;
-import com.example.bakingapp.di.AppContainer;
-import com.example.bakingapp.domain.BakingRecipeItem;
+import com.example.bakingapp.domain.model.BakingRecipeIngredients;
+import com.example.bakingapp.util.Utils;
 
 import java.util.Objects;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements RecipeStepItemClickListener {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
+
+    private final Utils utils = new Utils();
+    private boolean twoPane = false;
+    private RecipeStepViewModel twoPaneRecipeStepsViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        setAppbarTitle();
-        setBackNavigationInAppBar();
-    }
-
-    private void setAppbarTitle() {
-        final AppContainer appContainer = ((HomeApplication) getApplication()).getAppContainer();
-        final BakingRecipeItem recipeItem = appContainer.getBakingRepository().getSelectedRecipe();
-
-        setTitle(Objects.requireNonNull(recipeItem).getRecipeName());
-    }
-
-    private void setBackNavigationInAppBar() {
-        try {
-            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        } catch (NullPointerException e) {
-            Log.e(TAG, "Error while setting UP action", e);
+        twoPane = findViewById(R.id.step_details_tablet) != null;
+        if (twoPane) {
+            twoPaneRecipeStepsViewModel = new ViewModelProvider(this).get(RecipeStepViewModel.class);
+            twoPaneRecipeStepsViewModel.init(
+                    0,
+                    Objects.requireNonNull(utils.getBakingRepository(getApplication()).getSelectedRecipe()).getSteps()
+            );
+            // TODO: maybe just updating the view model is enough, set view with LiveData so no need to replace fragment
+            setFragment();
         }
+
+        setTitle(utils.getAppBarTitle(getApplication()));
+        utils.setBackNavigationInAppBar(getSupportActionBar(), TAG);
+    }
+
+    @Override
+    public void stepClicked(final int step) {
+        if (twoPane) {
+            twoPaneRecipeStepsViewModel.updateSelectedStep(step);
+            setFragment();
+        } else {
+            Intent intent = new Intent(this, RecipeStepActivity.class);
+            intent.putExtra(BakingRecipeIngredients.STEP_POSITION, step);
+            startActivity(intent);
+        }
+    }
+
+    private void setFragment() {
+        getSupportFragmentManager().beginTransaction().replace(
+                R.id.step_details_tablet, new RecipeStepFragment(twoPaneRecipeStepsViewModel)
+        ).commit();
     }
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="HomeMarginTop">8dp</dimen>
+    <dimen name="HomeMarginBottom">8dp</dimen>
+    <dimen name="HomeMarginStart">8dp</dimen>
+    <dimen name="HomeMarginEnd">8dp</dimen>
+
+    <dimen name="IngredientsListHeight">300dp</dimen>
+</resources>

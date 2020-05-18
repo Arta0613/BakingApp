@@ -29,7 +29,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ingredients"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/IngredientsListHeight"
             android:requiresFadingEdge="vertical"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
