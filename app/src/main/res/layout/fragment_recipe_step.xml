@@ -18,7 +18,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/no_player_image"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="@dimen/player_height"
             android:background="@color/colorPrimaryDark"
             android:gravity="center"
             android:text="@{viewModel.stepShortDescription}"
@@ -33,9 +33,18 @@
             android:id="@+id/step_image"
             imageUrl="@{viewModel.stepImageUrl}"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="@dimen/player_height"
             android:contentDescription="@string/image_of_recipe_step"
             android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/player"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/player_height"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

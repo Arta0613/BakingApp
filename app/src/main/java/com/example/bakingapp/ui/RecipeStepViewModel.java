@@ -1,5 +1,7 @@
 package com.example.bakingapp.ui;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -66,5 +68,10 @@ public class RecipeStepViewModel extends ViewModel {
 
     public void updateSelectedStep(final int selectedStep) {
         currentStep = selectedStep;
+    }
+
+    @NonNull
+    public final Uri getStepVideoUrl() {
+        return Uri.parse(bakingRecipeSteps.get(currentStep).getVideoUrl());
     }
 }
