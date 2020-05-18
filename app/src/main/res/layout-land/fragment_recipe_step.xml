@@ -19,17 +19,6 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/step_image"
-                imageUrl="@{viewModel.stepImageUrl}"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:contentDescription="@string/image_of_recipe_step"
-                android:scaleType="fitXY"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/no_player_image"
                 android:layout_width="match_parent"
@@ -43,6 +32,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Brownies" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/step_image"
+                imageUrl="@{viewModel.stepImageUrl}"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:contentDescription="@string/image_of_recipe_step"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/steps_description_label"

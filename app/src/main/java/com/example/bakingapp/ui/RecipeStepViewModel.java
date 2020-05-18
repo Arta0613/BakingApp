@@ -63,4 +63,8 @@ public class RecipeStepViewModel extends ViewModel {
     public final String getStepShortDescription() {
         return bakingRecipeSteps.get(currentStep).getShortDescription();
     }
+
+    public void updateSelectedStep(final int selectedStep) {
+        currentStep = selectedStep;
+    }
 }

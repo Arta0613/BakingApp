@@ -12,11 +12,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bakingapp.HomeApplication;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentHomeBinding;
 import com.example.bakingapp.domain.BakingRecipeItem;
-import com.example.bakingapp.repository.BakingRepository;
+import com.example.bakingapp.util.Utils;
 
 import java.util.Objects;
 
@@ -24,6 +23,7 @@ public class HomeFragment extends Fragment implements HomeItemClickListener {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
+    private final Utils utils = new Utils();
     private HomeViewModel homeViewModel;
 
     @Override
@@ -45,22 +45,19 @@ public class HomeFragment extends Fragment implements HomeItemClickListener {
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewModel(homeViewModel);
 
-        homeViewModel.init(getBakingRepository(), this);
+        homeViewModel.init(
+                utils.getBakingRepository(Objects.requireNonNull(getActivity()).getApplication()),
+                this
+        );
 
         return binding.getRoot();
     }
 
-    @NonNull
-    private BakingRepository getBakingRepository() {
-        final HomeApplication homeApplication =
-                ((HomeApplication) Objects.requireNonNull(getActivity()).getApplication());
-
-        return homeApplication.getAppContainer().getBakingRepository();
-    }
-
     @Override
     public void onItemClick(@NonNull final BakingRecipeItem bakingRecipeItem) {
-        getBakingRepository().setSelectedRecipe(bakingRecipeItem);
+        utils.getBakingRepository(
+                Objects.requireNonNull(getActivity()).getApplication()
+        ).setSelectedRecipe(bakingRecipeItem);
 
         Intent intent = new Intent(requireActivity(), DetailActivity.class);
         startActivity(intent);

@@ -7,4 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="HomeMargins">
+        <item name="android:layout_marginTop">@dimen/HomeMarginTop</item>
+        <item name="android:layout_marginBottom">@dimen/HomeMarginBottom</item>
+        <item name="android:layout_marginStart">@dimen/HomeMarginStart</item>
+        <item name="android:layout_marginEnd">@dimen/HomeMarginEnd</item>
+    </style>
 </resources>
