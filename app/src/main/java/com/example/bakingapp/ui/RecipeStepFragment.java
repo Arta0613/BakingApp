@@ -1,6 +1,5 @@
 package com.example.bakingapp.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +23,16 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.Objects;
+
 public class RecipeStepFragment extends Fragment {
 
+    private static final String PLAYER_POSITION = "playerPosition";
+
     @Nullable private final RecipeStepViewModel tabletModeViewModel;
+    private FragmentRecipeStepBinding binding;
     private SimpleExoPlayer player;
+    private RecipeStepViewModel viewModel;
 
     // required empty constructor if paramaterized constructor is used
     public RecipeStepFragment() {
@@ -38,12 +43,6 @@ public class RecipeStepFragment extends Fragment {
         this.tabletModeViewModel = tabletModeViewModel;
     }
 
-    @Override
-    public void onAttach(@NonNull final Context context) {
-        super.onAttach(context);
-        player = new SimpleExoPlayer.Builder(context).build();
-    }
-
     @Nullable
     @Override
     public View onCreateView(
@@ -51,18 +50,17 @@ public class RecipeStepFragment extends Fragment {
             @Nullable final ViewGroup container,
             @Nullable final Bundle savedInstanceState
     ) {
-        final FragmentRecipeStepBinding binding =
+        binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_step, container, false);
 
-        final RecipeStepViewModel viewModel;
         if (tabletModeViewModel != null) {
             viewModel = tabletModeViewModel;
         } else {
             viewModel = new ViewModelProvider(requireActivity()).get(RecipeStepViewModel.class);
         }
 
-        if (!viewModel.getStepVideoUrl().toString().isEmpty()) {
-            setPlayer(binding, viewModel);
+        if (savedInstanceState != null) {
+            viewModel.setPlayerPosition(savedInstanceState.getLong(PLAYER_POSITION, 0));
         }
 
         binding.setLifecycleOwner(getViewLifecycleOwner());
@@ -72,15 +70,34 @@ public class RecipeStepFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        player.release();
+    public void onResume() {
+        super.onResume();
+        player = new SimpleExoPlayer.Builder(Objects.requireNonNull(getContext())).build();
+        if (!viewModel.getStepVideoUrl().toString().isEmpty()) {
+            setPlayer();
+        }
     }
 
-    private void setPlayer(
-            @NonNull final FragmentRecipeStepBinding binding,
-            @NonNull final RecipeStepViewModel viewModel
-    ) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (player != null) {
+            if (viewModel.getPlayerPosition() != -1) { // TODO: better way to reset player position on tablets
+                viewModel.setPlayerPosition(player.getCurrentPosition());
+            }
+            player.stop();
+            player.release();
+            player = null;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(PLAYER_POSITION, viewModel.getPlayerPosition());
+    }
+
+    private void setPlayer() {
         final PlayerView playerView = binding.getRoot().findViewById(R.id.player);
         playerView.setVisibility(View.VISIBLE);
         playerView.setPlayer(player);
@@ -96,7 +113,10 @@ public class RecipeStepFragment extends Fragment {
 
         playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-
         player.prepare(videoSource);
+
+        final long playerPosition = viewModel.getPlayerPosition();
+        player.seekTo(playerPosition >=0 ? playerPosition : 1);
+        viewModel.setPlayerPosition(0);
     }
 }
