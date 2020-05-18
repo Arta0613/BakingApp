@@ -24,10 +24,19 @@
 
         <activity
             android:name=".ui.DetailActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".ui.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.HomeActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.RecipeStepActivity"
+            android:parentActivityName=".ui.DetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.DetailActivity" />
         </activity>
     </application>
 

@@ -13,11 +13,21 @@ public class DetailViewModel extends ViewModel {
     @NonNull private final StepsAdapter stepsAdapter = new StepsAdapter();
     private BakingRecipeItem selectedRecipe;
 
-    public void init(@NonNull final BakingRecipeItem selectedRecipe) {
+    public void init(
+            @NonNull final BakingRecipeItem selectedRecipe,
+            @NonNull final RecipeStepItemClickListener recipeStepItemClickListener
+    ) {
         if (this.selectedRecipe == null) {
             this.selectedRecipe = selectedRecipe;
             setAdapters();
         }
+        // As the fragment is implementing the interface, we want to re-set this as the fragment
+        // can be destroyed at any point causing the app to crash when the interface is called
+        setStepClickListener(recipeStepItemClickListener);
+    }
+
+    public void setStepClickListener(@NonNull final RecipeStepItemClickListener recipeStepItemClickListener) {
+        stepsAdapter.setStepClickListener(recipeStepItemClickListener);
     }
 
     @NonNull

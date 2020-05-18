@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 public class BakingRecipeIngredients {
 
+    @NonNull public static final String STEP_POSITION = "step_position";
+
     private final double recipeQuantity;
     @NonNull private final String recipeMeasure;
     @NonNull private final String recipeIngredient;

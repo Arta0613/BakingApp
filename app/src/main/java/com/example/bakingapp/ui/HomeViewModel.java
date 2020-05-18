@@ -39,12 +39,12 @@ public class HomeViewModel extends ViewModel {
         return adapter;
     }
 
-    public void setRepository(@NonNull final BakingRepository repository) {
+    public void init(
+            @NonNull final BakingRepository repository,
+            @NonNull final HomeItemClickListener homeItemClickListener
+    ) {
         this.repository = repository;
         loadRecipes();
-    }
-
-    public void setClickListenerToAdapter(@NonNull final HomeItemClickListener homeItemClickListener) {
         adapter.setHomeItemClickListener(homeItemClickListener);
     }
 

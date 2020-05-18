@@ -1,5 +1,6 @@
 package com.example.bakingapp.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bakingapp.HomeApplication;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentDetailBinding;
+import com.example.bakingapp.domain.model.BakingRecipeIngredients;
 import com.example.bakingapp.repository.BakingRepository;
 
 import java.util.Objects;
 
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements RecipeStepItemClickListener {
+
+    private final static String TAG = DetailFragment.class.getSimpleName();
 
     @Nullable
     @Override
@@ -34,7 +38,7 @@ public class DetailFragment extends Fragment {
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewModel(detailViewModel);
 
-        detailViewModel.init(Objects.requireNonNull(getBakingRepository().getSelectedRecipe()));
+        detailViewModel.init(Objects.requireNonNull(getBakingRepository().getSelectedRecipe()), this);
 
         return binding.getRoot();
     }
@@ -45,5 +49,12 @@ public class DetailFragment extends Fragment {
                 ((HomeApplication) Objects.requireNonNull(getActivity()).getApplication());
 
         return homeApplication.getAppContainer().getBakingRepository();
+    }
+
+    @Override
+    public void stepClicked(final int position) {
+        Intent intent = new Intent(requireActivity(), RecipeStepActivity.class);
+        intent.putExtra(BakingRecipeIngredients.STEP_POSITION, position);
+        startActivity(intent);
     }
 }

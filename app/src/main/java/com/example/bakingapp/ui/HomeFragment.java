@@ -45,8 +45,7 @@ public class HomeFragment extends Fragment implements HomeItemClickListener {
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewModel(homeViewModel);
 
-        homeViewModel.setRepository(getBakingRepository());
-        homeViewModel.setClickListenerToAdapter(this);
+        homeViewModel.init(getBakingRepository(), this);
 
         return binding.getRoot();
     }
