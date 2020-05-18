@@ -14,6 +14,7 @@ public class RecipeStepViewModel extends ViewModel {
 
     private List<BakingRecipeSteps> bakingRecipeSteps;
     private int currentStep = -1;
+    private long playerPosition = 0;
 
     @NonNull public final MutableLiveData<Boolean> previousButtonEnabled = new MutableLiveData<>(true);
     @NonNull public final MutableLiveData<Boolean> nextButtonEnabled = new MutableLiveData<>(true);
@@ -73,5 +74,13 @@ public class RecipeStepViewModel extends ViewModel {
     @NonNull
     public final Uri getStepVideoUrl() {
         return Uri.parse(bakingRecipeSteps.get(currentStep).getVideoUrl());
+    }
+
+    public final long getPlayerPosition() {
+        return playerPosition;
+    }
+
+    public void setPlayerPosition(final long playerPosition) {
+        this.playerPosition = playerPosition;
     }
 }

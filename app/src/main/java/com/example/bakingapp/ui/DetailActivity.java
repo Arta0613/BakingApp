@@ -45,6 +45,7 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepItemC
     public void stepClicked(final int step) {
         if (twoPane) {
             twoPaneRecipeStepsViewModel.updateSelectedStep(step);
+            twoPaneRecipeStepsViewModel.setPlayerPosition(-1); // simple way to reset position in tablet mode; TODO: investigate better way
             setFragment();
         } else {
             Intent intent = new Intent(this, RecipeStepActivity.class);
