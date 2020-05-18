@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bakingapp.BR;
 import com.example.bakingapp.R;
 import com.example.bakingapp.domain.model.BakingRecipeSteps;
+import com.example.bakingapp.ui.RecipeStepItemClickListener;
 
 import java.util.List;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
 
     private List<BakingRecipeSteps> steps;
+    private RecipeStepItemClickListener recipeStepItemClickListener;
 
     @NonNull
     @Override
@@ -42,6 +44,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         this.steps = steps;
     }
 
+    public void setStepClickListener(@NonNull final RecipeStepItemClickListener recipeStepItemClickListener) {
+        this.recipeStepItemClickListener = recipeStepItemClickListener;
+    }
+
     class StepsViewHolder extends RecyclerView.ViewHolder {
 
         @NonNull
@@ -53,6 +59,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         }
 
         void bind(final int position) {
+            binding.getRoot().setOnClickListener(l -> recipeStepItemClickListener.stepClicked(position));
             binding.setVariable(BR.step, steps.get(position));
             binding.executePendingBindings();
         }

@@ -13,19 +13,22 @@ public class BakingRecipeSteps {
     private final String videoUrl;
     @NonNull
     private final String thumbnailUrl;
+    private final int stepNumber;
 
     public BakingRecipeSteps(
             final int id,
             @NonNull final String shortDescription,
             @NonNull final String description,
             @NonNull final String videoUrl,
-            @NonNull final String thumbnailUrl
+            @NonNull final String thumbnailUrl,
+            final int stepNumber
     ) {
         this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;
         this.videoUrl = videoUrl;
         this.thumbnailUrl = thumbnailUrl;
+        this.stepNumber = stepNumber;
     }
 
     public final int getId() {
@@ -49,12 +52,18 @@ public class BakingRecipeSteps {
 
     @NonNull
     public final String getThumbnailUrl() {
-        return thumbnailUrl;
+        // TODO: investigate better way to determine if url is of type image
+        if (thumbnailUrl.endsWith(".jpg") || thumbnailUrl.endsWith(".png")) return thumbnailUrl;
+        return "";
+    }
+
+    public final int getStepNumber() {
+        return stepNumber;
     }
 
     @NonNull
-    public final String getShortDescriptionWithStep() {
-        return (getId() + 1) + ".\t" + shortDescription;
+    public final String getShortDescriptionWithStepNumber() {
+        return getStepNumber() + ".\t" + getShortDescription();
     }
 
     @NonNull
@@ -66,6 +75,7 @@ public class BakingRecipeSteps {
                 ", description='" + description + '\'' +
                 ", videoUrl='" + videoUrl + '\'' +
                 ", thumbnailUrl='" + thumbnailUrl + '\'' +
+                ", stepNumber='" + stepNumber + '\'' +
                 '}';
     }
 }

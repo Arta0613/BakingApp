@@ -8,21 +8,21 @@ public class StepsApiResponse {
     private final int id;
     @NonNull private final String shortDescription;
     @NonNull private final String description;
-    @NonNull private final String videoUrl;
-    @NonNull private final String thumbnailUrl;
+    @NonNull private final String videoURL;
+    @NonNull private final String thumbnailURL;
 
     public StepsApiResponse(
             final int id,
             @NonNull final String shortDescription,
             @NonNull final String description,
-            @NonNull final String videoUrl,
-            @NonNull final String thumbnailUrl
+            @NonNull final String videoURL,
+            @NonNull final String thumbnailURL
     ) {
         this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;
-        this.videoUrl = videoUrl;
-        this.thumbnailUrl = thumbnailUrl;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
     }
 
     public final int getId() {
@@ -41,12 +41,12 @@ public class StepsApiResponse {
 
     @NonNull
     public final String getVideoUrl() {
-        return videoUrl;
+        return videoURL;
     }
 
     @NonNull
     public final String getThumbnailUrl() {
-        return thumbnailUrl;
+        return thumbnailURL;
     }
 
     @NonNull
@@ -56,8 +56,8 @@ public class StepsApiResponse {
                 "id=" + id +
                 ", shortDescription='" + shortDescription + '\'' +
                 ", description='" + description + '\'' +
-                ", videoUrl='" + videoUrl + '\'' +
-                ", thumbnailUrl='" + thumbnailUrl + '\'' +
+                ", videoUrl='" + videoURL + '\'' +
+                ", thumbnailUrl='" + thumbnailURL + '\'' +
                 '}';
     }
 }

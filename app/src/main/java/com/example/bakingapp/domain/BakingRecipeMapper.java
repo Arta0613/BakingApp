@@ -55,6 +55,7 @@ public class BakingRecipeMapper {
             @NonNull final List<StepsApiResponse> stepsApiResponseList
     ) {
         final List<BakingRecipeSteps> stepsList = new ArrayList<>();
+        int stepNumber = 1;
 
         for (StepsApiResponse stepsApiResponse : stepsApiResponseList) {
             stepsList.add(new BakingRecipeSteps(
@@ -62,7 +63,8 @@ public class BakingRecipeMapper {
                     stepsApiResponse.getShortDescription(),
                     stepsApiResponse.getDescription(),
                     stepsApiResponse.getVideoUrl(),
-                    stepsApiResponse.getThumbnailUrl()
+                    stepsApiResponse.getThumbnailUrl(),
+                    stepNumber++
             ));
         }
 
