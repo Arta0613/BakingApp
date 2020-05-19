@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 
 import com.example.bakingapp.HomeApplication;
+import com.example.bakingapp.di.AppContainer;
 import com.example.bakingapp.domain.BakingRecipeItem;
 import com.example.bakingapp.repository.BakingRepository;
 
@@ -24,7 +25,12 @@ public class Utils {
 
     @NonNull
     public final BakingRepository getBakingRepository(@NonNull final Context context) {
-        return ((HomeApplication) context).getAppContainer().getBakingRepository();
+        return getAppContainer(context).getBakingRepository();
+    }
+
+    @NonNull
+    public final AppContainer getAppContainer(@NonNull final Context context) {
+        return ((HomeApplication) context).getAppContainer();
     }
 
     public void setBackNavigationInAppBar(

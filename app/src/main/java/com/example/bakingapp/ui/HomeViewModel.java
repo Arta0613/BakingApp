@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.example.bakingapp.domain.BakingRecipeItem;
 import com.example.bakingapp.repository.BakingRepository;
@@ -25,9 +26,10 @@ public class HomeViewModel extends ViewModel {
     @NonNull private final RecipeAdapter adapter = new RecipeAdapter();
     @NonNull private final CompositeDisposable disposables = new CompositeDisposable();
 
-    @NonNull
-    public final MutableLiveData<Boolean> loadingIndicator = new MutableLiveData<>(false);
-    public final MutableLiveData<Boolean> showErrorText = new MutableLiveData<>(false);
+    @NonNull public final MutableLiveData<Boolean> loadingIndicator = new MutableLiveData<>(false);
+    @NonNull public final MutableLiveData<Boolean> showErrorText = new MutableLiveData<>(false);
+
+    private CountingIdlingResource idlingResource;
 
     @Override
     protected void onCleared() {
@@ -41,9 +43,11 @@ public class HomeViewModel extends ViewModel {
 
     public void init(
             @NonNull final BakingRepository repository,
-            @NonNull final HomeItemClickListener homeItemClickListener
+            @NonNull final HomeItemClickListener homeItemClickListener,
+            @NonNull final CountingIdlingResource idlingResource
     ) {
         this.repository = repository;
+        this.idlingResource = idlingResource;
         loadRecipes();
         adapter.setHomeItemClickListener(homeItemClickListener);
     }
@@ -55,6 +59,8 @@ public class HomeViewModel extends ViewModel {
     }
 
     private void load() {
+        idlingResource.increment();
+
         disposables.add(repository.getRecipes()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -67,6 +73,7 @@ public class HomeViewModel extends ViewModel {
 
                         loadingIndicator.setValue(false);
                         showErrorText.setValue(false);
+                        idlingResource.decrement();
                     }
 
                     @Override
@@ -74,6 +81,7 @@ public class HomeViewModel extends ViewModel {
                         Log.e(TAG, "Error retrieving recipes: ", e);
                         loadingIndicator.setValue(false);
                         showErrorText.setValue(true);
+                        idlingResource.decrement();
                     }
                 }));
     }

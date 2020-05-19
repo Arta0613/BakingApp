@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentHomeBinding;
@@ -47,7 +48,8 @@ public class HomeFragment extends Fragment implements HomeItemClickListener {
 
         homeViewModel.init(
                 utils.getBakingRepository(Objects.requireNonNull(getActivity()).getApplication()),
-                this
+                this,
+                getIdlingResource()
         );
 
         return binding.getRoot();
@@ -61,5 +63,10 @@ public class HomeFragment extends Fragment implements HomeItemClickListener {
 
         Intent intent = new Intent(requireActivity(), DetailActivity.class);
         startActivity(intent);
+    }
+
+    @NonNull
+    private CountingIdlingResource getIdlingResource() {
+        return utils.getAppContainer(Objects.requireNonNull(getActivity()).getApplication()).getCountingIdlingResource();
     }
 }
